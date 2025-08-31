@@ -44,11 +44,11 @@
             </intent-filter>
         </service>
 
-        <receiver
+        <!-- <receiver
             android:name="com.clevertap.android.sdk.pushnotification.CTPushNotificationReceiver"
             android:exported="false"
-            android:enabled="true" />
-            
+            android:enabled="true" /> -->
+
     </application>
 
     <!-- Flutter ProcessText Query -->

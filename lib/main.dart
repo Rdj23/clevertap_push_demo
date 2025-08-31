@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:clevertap_plugin/clevertap_plugin.dart';
-
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); 
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -32,12 +31,17 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
+  late CleverTapPlugin _clevertapPlugin; // 👈 instance for CleverTap
 
   @override
   void initState() {
     super.initState();
+    CleverTapPlugin.setDebugLevel(3);
+    _clevertapPlugin = CleverTapPlugin();
+
     _askNotificationPermission();
     _initCleverTap();
+    _listenForNotificationClicks();
   }
 
   /// Ask push permission on launch
@@ -65,7 +69,24 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  /// Listen for CleverTap push click payload
+  void _listenForNotificationClicks() {
+    _clevertapPlugin.setCleverTapPushClickedPayloadReceivedHandler(
+      (Map<String, dynamic>? payload) {
+        debugPrint("Notification clicked payload: $payload");
+        if (payload != null && mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HomePageWithPayload(payload: payload),
+            ),
+          );
+        }
+      },
+    );
+  }
 
+  /// Handle login
   Future<void> _login() async {
     final email = emailController.text.trim();
     if (email.isEmpty) return;
@@ -74,10 +95,7 @@ class _LoginPageState extends State<LoginPage> {
     await CleverTapPlugin.onUserLogin({
       'Identity': email,
       'Email': email,
-      
     });
-
-
 
     if (!mounted) return;
     Navigator.pushReplacement(
@@ -119,6 +137,21 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(title: const Text("Home")),
       body: const Center(
         child: Text("Welcome! Push is enabled with CleverTap."),
+      ),
+    );
+  }
+}
+
+class HomePageWithPayload extends StatelessWidget {
+  final Map<String, dynamic> payload;
+  const HomePageWithPayload({super.key, required this.payload});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Notification Clicked")),
+      body: Center(
+        child: Text("Payload: $payload"),
       ),
     );
   }
