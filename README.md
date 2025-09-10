@@ -1,6 +1,6 @@
 # clevertap_push_demo
 
-A new Flutter project.
+A new Flutter project to test the push notification and starter code for the flutter clevertap sdk
 
 ## Getting Started
 
