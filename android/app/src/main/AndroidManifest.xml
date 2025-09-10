@@ -29,8 +29,8 @@
         </activity>
 
         <!-- CleverTap Meta-Data -->
-        <meta-data android:name="CLEVERTAP_ACCOUNT_ID" android:value="***"/>
-        <meta-data android:name="CLEVERTAP_TOKEN" android:value="***"/>
+        <meta-data android:name="CLEVERTAP_ACCOUNT_ID" android:value="R57-875-KK7Z"/>
+        <meta-data android:name="CLEVERTAP_TOKEN" android:value="5ab-a52"/>
        
         <meta-data android:name="CLEVERTAP_USE_GOOGLE_AD_ID" android:value="0"/>
         <meta-data android:name="flutterEmbedding" android:value="2"/>
